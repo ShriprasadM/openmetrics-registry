@@ -1,0 +1,23 @@
+scraper aws_mediatailor_cloudwatch module {
+  frequency  = 60
+  lookback   = 600
+  timeout    = 20
+  resolution = 60
+  lag        = 120
+
+  gauge "connections" {
+    source cloudwatch "connections" {
+      query {
+        aggregator  = "Maximum"
+        namespace   = "AWS/MediaTailor"
+        metric_name = "RequestCount"
+
+        dimensions = {
+          DBInstanceIdentifier = resources.each.DBInstanceIdentifier
+        }
+      }
+    }
+  }
+
+  
+}
